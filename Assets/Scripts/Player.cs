@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
@@ -14,11 +15,14 @@ public class Player : MonoBehaviour
     GameObject currentFloor;
     [SerializeField] TextMeshProUGUI HPText;
     int Score = 0;
-    [SerializeField] TextMeshProUGUI ScoreText;
+    [SerializeField] TextMeshProUGUI scoreText;
     float scoreTime = 0f;
+    [SerializeField] GameObject replayButton;
+    [SerializeField] TextMeshProUGUI dieText;
+    [SerializeField] GameObject startButton;
     void Start()
     {
-        
+        Time.timeScale = 0;
     }
 
     // Update is called once per frame
@@ -73,6 +77,8 @@ public class Player : MonoBehaviour
         if(other.gameObject.tag == "DeathLine")
         {
             Debug.Log("寄");
+            //游戏结束
+            Die();
         }
     }
 
@@ -86,6 +92,8 @@ public class Player : MonoBehaviour
         if(HP < 0)
         {
             HP = 0;
+            //游戏结束
+            Die();
         }
         HPText.text = "HP:" + HP;
     }
@@ -97,7 +105,26 @@ public class Player : MonoBehaviour
         {
             Score++;
             scoreTime = 0f;
-            ScoreText.text = "地下" + Score.ToString() + "层";
+            scoreText.text = "地下" + Score.ToString() + "层";
         }
+    }
+
+    void Die()
+    {
+        Time.timeScale = 0;
+        replayButton.SetActive(true);
+        dieText.gameObject.SetActive(true);
+    }
+
+    public void Replay()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene("SampleScene");
+    }
+
+    public void StartPlay()
+    {
+        Time.timeScale = 1;
+        startButton.SetActive(false);
     }
 }
