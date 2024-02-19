@@ -20,11 +20,11 @@ public class Player : MonoBehaviour
         Transform transform = GetComponent<Transform>();
         if (Input.GetKey(KeyCode.RightArrow))
         {
-            transform.Translate(moveSpeed*Time.deltaTime, 0, 0);
+            transform.Translate(moveSpeed * Time.deltaTime, 0, 0);
         }
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            transform.Translate(-moveSpeed*Time.deltaTime, 0, 0);
+            transform.Translate(-moveSpeed * Time.deltaTime, 0, 0);
         }
 
         
