@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
 {
     
     float moveSpeed = 5f;
-
+    int health = 10;
     void Start()
     {
         
@@ -34,6 +34,22 @@ public class Player : MonoBehaviour
     void OnCollisionEnter2D(Collision2D other)
     {
         Debug.Log("碰到了" + other.gameObject.tag);
+        if(other.gameObject.tag == "NormalFloor")
+        {
+            health += 1;
+            if(health > 10)
+            {
+                health = 10;
+            } 
+        }
+        if(other.gameObject.tag == "NailsFloor")
+        {
+            health -= 1;
+            if(health < 1)
+            {
+                Debug.Log("寄");
+            } 
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other)
