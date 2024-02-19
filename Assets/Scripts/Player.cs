@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     
     float moveSpeed = 5f;
     int health = 10;
+    GameObject currentFloor;
     void Start()
     {
         
@@ -33,22 +34,37 @@ public class Player : MonoBehaviour
     //碰撞判断
     void OnCollisionEnter2D(Collision2D other)
     {
+    
         Debug.Log("碰到了" + other.gameObject.tag);
+
         if(other.gameObject.tag == "NormalFloor")
         {
-            health += 1;
-            if(health > 10)
+            if(other.contacts[0].normal == Vector2.up)
             {
-                health = 10;
-            } 
+                currentFloor = other.gameObject;
+                health += 1;
+                if(health > 10)
+                {
+                    health = 10;
+                } 
+            }  
         }
         if(other.gameObject.tag == "NailsFloor")
         {
-            health -= 1;
-            if(health < 1)
+            if(other.contacts[0].normal == Vector2.up)
             {
-                Debug.Log("寄");
-            } 
+                currentFloor = other.gameObject;
+                health -= 1;
+                if(health < 1)
+                {
+                    Debug.Log("寄");
+                } 
+            }
+        }
+        if(other.gameObject.tag == "TopWall")
+        {
+            Debug.Log("current" + currentFloor.name);
+            currentFloor.GetComponent<BoxCollider2D>().enabled = false;
         }
     }
 
