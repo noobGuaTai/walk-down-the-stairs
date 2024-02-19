@@ -1,14 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
     
     float moveSpeed = 5f;
-    int health = 10;
+    [SerializeField] int HP = 10;
     GameObject currentFloor;
+    [SerializeField] TextMeshProUGUI HPText;
+    int Score = 0;
+    [SerializeField] TextMeshProUGUI ScoreText;
+    float scoreTime = 0f;
     void Start()
     {
         
@@ -28,7 +35,7 @@ public class Player : MonoBehaviour
             transform.Translate(-moveSpeed * Time.deltaTime, 0, 0);
         }
 
-        
+        ChangeScore();
     }
 
     //碰撞判断
@@ -42,11 +49,7 @@ public class Player : MonoBehaviour
             if(other.contacts[0].normal == Vector2.up)
             {
                 currentFloor = other.gameObject;
-                health += 1;
-                if(health > 10)
-                {
-                    health = 10;
-                } 
+                ChangeHP(1);
             }  
         }
         if(other.gameObject.tag == "NailsFloor")
@@ -54,17 +57,14 @@ public class Player : MonoBehaviour
             if(other.contacts[0].normal == Vector2.up)
             {
                 currentFloor = other.gameObject;
-                health -= 1;
-                if(health < 1)
-                {
-                    Debug.Log("寄");
-                } 
+                ChangeHP(-3);
             }
         }
         if(other.gameObject.tag == "TopWall")
         {
             Debug.Log("current" + currentFloor.name);
             currentFloor.GetComponent<BoxCollider2D>().enabled = false;
+            ChangeHP(-3);
         }
     }
 
@@ -73,6 +73,31 @@ public class Player : MonoBehaviour
         if(other.gameObject.tag == "DeathLine")
         {
             Debug.Log("寄");
+        }
+    }
+
+    void ChangeHP(int change)
+    {
+        HP += change;
+        if(HP > 10)
+        {
+            HP = 10;
+        }
+        if(HP < 0)
+        {
+            HP = 0;
+        }
+        HPText.text = "HP:" + HP;
+    }
+
+    void ChangeScore()
+    {
+        scoreTime += Time.deltaTime;
+        if(scoreTime > 2f)
+        {
+            Score++;
+            scoreTime = 0f;
+            ScoreText.text = "地下" + Score.ToString() + "层";
         }
     }
 }
